@@ -27,7 +27,7 @@ function utotn(A, B, C, α, t, T)
     minT = [0.0; T[1:end-1]]
     return sum(
         if t <= T[i] && t > minT[i]
-            dot(CAtB(A, B, C, T[i]-t)', α[:,i])
+            dot(CAtB(A, B, C, T[i]-t), α[:,i])
         else
             0.0
         end                     
@@ -45,9 +45,9 @@ function upi(A,B,C,t,T,i)
 end
 
 function mass_spring_damper2!(du, u, p, t)
-    A, B, C, α, T = p
+    A, B, C, α, T, f = p
 
-    du[1:2N] = A * u[1:2N] + B * utotn(A, B, C, α, t, T)
+    du[1:2N] = A * u[1:2N] + B * f(A, B, C, α, t, T)
 end
 
 function mass_spring_damper!(du, u, p, t)

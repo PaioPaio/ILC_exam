@@ -22,7 +22,7 @@ y₁ = vcat(x₁, zeros(N))
 ywant = hcat(y₁, zeros(2N), zeros(2N))
 
 # Initialize storage for results
-xⁱ = zeros(N, o, Niter)
+xⁱ = zeros(N, o, Niter)                         
 vⁱ = zeros(N, o, Niter)
 uⁱ = zeros(1, o, Niter)
 αrray = zeros(2N, o, Niter)
@@ -39,8 +39,8 @@ u0 = vcat(zeros(N), zeros(N), 0.0)
 tspan = (0.0, T[end])
 for i in 1:Niter
     # Set up and solve ODE
-    p = (A, B, C, αrray[:,:,i], T)
-    prob = ODEProblem(mass_spring_damper!, u0, tspan, p)
+    p = (A, B, C, αrray[:,:,i], T,utotn)
+    prob = ODEProblem(mass_spring_damper2!, u0, tspan, p)
     sol = solve(prob,Tsit5(),abstol= 1e-9)
     solarray[i] = sol
 
@@ -48,7 +48,7 @@ for i in 1:Niter
     for (j, t) in enumerate(T)
         xⁱ[:, j, i] = sol(t)[1:N]
         vⁱ[:, j, i] = sol(t)[N+1:2N]
-        uⁱ[:, j, i] = sol(t)[end:end]
+        #uⁱ[:, j, i] = sol(t)[end:end]
     end
 
     # Update α for next iteration
@@ -62,8 +62,9 @@ end
 # Time vector from the solution (full time points)
 t_vals = 0.0:0.05:T[end] 
 x_vals = [solarray[end](t)[1:N] for t in t_vals]  # Position data
-v_vals = [solarray[end](t)[N+1:2N] for t in t_vals]  # Velocity data        
-u_vals = [solarray[end](t)[end] for t in t_vals]  # Control input over time
+v_vals = [solarray[end](t)[N+1:2N] for t in t_vals]  # Velocity data 
+u_vals = [utotn(A, B, C, αrray[:,:,end], t, T) for t in t_vals]       
+#u_vals = [solarray[end](t)[end] for t in t_vals]  # Control input over time
 
 # Creating the figure
 f = Figure(resolution = (1200, 1000))
@@ -83,17 +84,17 @@ for i in 1:N
     scatter!(ax2, T, ywant[N+i,:], color=:black, marker=:x, markersize=8)  # Desired velocities as x markers
 end
 axislegend(ax2)
-##
+#
 base_vals = zeros(o,2N,length(t_vals))
 # 3. Base functions plot using upi
 ax3 = Axis(f[3, 1], title="Base Functions π", xlabel="Time", ylabel="Base Functions")
 for i in 1:o
     base_vals[i,:,:] .= hcat([upi(A, B, C, t, T, i) for t in t_vals]...)
-    for j in 8:8# Using upi to compute the base functions
+    for j in 1:2N# Using upi to compute the base functions
         lines!(ax3, t_vals, base_vals[i,j,:])
     end
 end
-##
+#
 # 4. Control Action plot (input uₙ)
 ax4 = Axis(f[4, 1], title="Control Action uₙ", xlabel="Time", ylabel="Control Action")
 lines!(ax4, t_vals, u_vals, color=:black)
