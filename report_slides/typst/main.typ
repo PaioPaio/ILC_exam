@@ -20,7 +20,7 @@
   box-task-title: none
 )
 
-#show figure.caption: set text(size: 15pt)
+#show figure.caption: set text(size: 14pt)
 
 #slide[
   = Overview
@@ -33,7 +33,7 @@
 ]
 
 #slide[
-  = What is Iterative Learning Control ?
+  = Iterative Learning Control in a nutshell
 
   Iterative Learning Control @bristowSurveyIterativeLearning2006 (ILC) generally concerns the control of a repeated task. It does so by:
 
@@ -56,12 +56,6 @@
   -
   - 
 
-]
-
-#slide[
-  = Contributions of the paper
-  - Treatment of the case in which *\#inputs<\#outputs*
-  - 
 ]
 
 #slide[
@@ -100,8 +94,19 @@
   = Simulations
   #side-by-side()[  
     == Carts
+
+    #image("images/MSD.png")
+
+    Mass-spring-damper system actuated just on the last cart
+
   ][
     == Basketball in the wind
+
+  #side-by-side()[
+    #image("images/freethrow_wind.svg")
+  ][
+    Basket hoops in 
+  ]
   ]
 
 ]
@@ -132,6 +137,36 @@
     #figure(
       image("images/MSD_8carts_300iters.svg", fit: "contain"),
       caption: "300 Iterations - Better, still not perfect ",
+    )
+  ]
+]
+
+#slide()[
+  ===  Basketball - *$d tilde(T) = 0.2s$*
+  #side-by-side()[
+    #figure(
+      image("images/basket_8iters_0.2dT.svg", fit: "contain"),
+      caption: "8 Iterations",
+    )
+  ][
+    #figure(
+      image("images/basket_100iters_0.2dT.svg", fit: "contain"),
+      caption: "100 Iterations",
+    )
+  ]
+]
+
+#slide()[
+  ===  Basketball - *$d tilde(T)$* = 0.5s
+  #side-by-side()[
+    #figure(
+      image("images/basket_8iters_0.5dT.svg", fit: "contain"),
+      caption: "8 Iterations",
+    )
+  ][
+    #figure(
+      image("images/basket_100iters_0.5dT.svg", fit: "contain"),
+      caption: "100 Iterations",
     )
   ]
 ]
