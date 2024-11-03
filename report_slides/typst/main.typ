@@ -3,7 +3,7 @@
 
 #import slides: *
 
-#set text(lang: "en")
+#set text(lang: "en", font: "New Computer Modern")
 
 #set math.vec(delim: "[")
 
@@ -17,11 +17,15 @@
   show-semester: false,
   show-date: false,
   email: link("mailto:lorenzo.paiola@iit.it"),
-  box-task-title: none,
+  box-task-title: none
 )
+
+#show figure.caption: set text(size: 15pt)
 
 #slide[
   = Overview
+  \
+  - Brief summary of Iterative Learning Control
 
   - Implementation of "Iterative Learning in Functional Space for Non-Square Linear Systems" by _C. Della Santina_ and _F. Angelini_ @dellasantinaIterativeLearningFunctional2021.
 
@@ -44,9 +48,20 @@
 ]
 
 #slide[
-  = What is missing ?
-  - No treatment of the case in which *\#inputs<\#outputs*
+
+  ==== What is Iterative Learning Control ?
+  
+  In a nutshell ILC : 
+  - 
   -
+  - 
+
+]
+
+#slide[
+  = Contributions of the paper
+  - Treatment of the case in which *\#inputs<\#outputs*
+  - 
 ]
 
 #slide[
@@ -81,24 +96,46 @@
   ]
 ]
 
-#slide[
-  = What is functional ILC ?
-  #side-by-side[
-    #set text(size: 0.9em)
-    == fILC Structure
-    - $vec(alpha^1_j, dots.v , alpha^(m o)_j)$ vector of weights updated at each iteration $j$
-    - $l$ basis functions for each weight
-    - Reference given only at discrete set of sampled times
-    - $L in RR^(m o times m o)$ learning matrix s.t. $rho(I - L H)<1$
+#slide()[
+  = Simulations
+  #side-by-side()[  
+    == Carts
   ][
-    #set text(size: 1em)
-    #image("images/blockschemes.png", fit: "cover")
+    == Basketball in the wind
+  ]
+
+]
+
+#slide()[
+  ===  5 Carts
+  #side-by-side()[
+    #figure(
+      image("images/MSD_5carts_30iters.svg", fit: "contain"),
+      caption: "30 Iterations",
+    )
+  ][
+    #figure(
+      image("images/MSD_5carts_300iters.svg", fit: "contain"),
+      caption: "300 Iterations - Not much changes",
+    )
   ]
 ]
 
-#slide[
-  = What is ILC ?
+#slide()[
+  === 8 Carts
+  #side-by-side()[
+    #figure(
+      image("images/MSD_8carts_30iters.svg", fit: "contain"),
+      caption: "30 Iterations - Can't perform to specification",
+    )
+  ][
+    #figure(
+      image("images/MSD_8carts_300iters.svg", fit: "contain"),
+      caption: "300 Iterations - Better, still not perfect ",
+    )
+  ]
 ]
+
 
 #slide[
   #set text(size: 0.7em)

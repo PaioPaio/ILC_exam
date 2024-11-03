@@ -30,7 +30,7 @@ function basket_matrices(m)
     B = zeros(6, 3)
     C = zeros(3, 6)
 
-    A[1:3, 4:6] = I(3)
+    A[1:3, 4:6] = I(3)  
     B[4:6, :] = I(3) ./ m
 
     C[:, 1:3] = I(3)
@@ -83,7 +83,6 @@ function compute_H_constr(A, B, C, T, dT, fun)
         if i >= j
             # f(t,p) where t is the integration variable and p is tuple of parameters (we don't need that since we are directly giving the function A,B,C)
             f(t, p) = fun(A, B, C, Twith0[i+1] - t) * fun(A, B, C, Twith0[j+1] - t)'
-            #Main.@infiltrate
             H[(i-1)*No+1:i*No, (j-1)*No+1:j*No] .= solve(IntegralProblem(f, (max(0.0, Twith0[j]), min(Twith0[j+1], Twith0[j] + dT))), HCubatureJL()).u
         else
             H[(i-1)*No+1:i*No, (j-1)*No+1:j*No] .= zeros(No, No)
@@ -102,6 +101,17 @@ function pi_paper(A, B, C, t, T, i)
     l = size(B, 2)
     minT = [0.0; T[1:end-1]]
     if t < T[i] && t >= minT[i]
+        return CAtB(A, B, C, T[i] - t)
+    else
+        return zeros(No, l)
+    end
+end             
+
+function pi_constr(A,B,C,t,T,dT,i)
+    No, Ns = size(C)
+    l = size(B, 2)
+    Twith0 = [0.0; T]
+    if t < Twith0[i]+dT && t >= Twith0[i]
         return CAtB(A, B, C, T[i] - t)
     else
         return zeros(No, l)
@@ -137,13 +147,12 @@ function utotconstr(A, B, C, α, f, t, T, dT)
     l = size(B, 2)
     Twith0 = [0.0; T]
     return sum(
-        if t < Twith0[i] + dT && t >= Twith0[i]
-            Main.@infiltrate
+        if t < Twith0[i] + dT && t >= Twith0[i] 
             f(A, B, C, T[i] - t)' * α[:, i]
         else
             zeros(l)
         end
-        for i in eachindex(T)[1:end-1]
+        for i in eachindex(T)
     )
 end
 # Method with standard basis
