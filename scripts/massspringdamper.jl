@@ -1,6 +1,6 @@
 using OrdinaryDiffEq, LinearAlgebra, Integrals, CairoMakie, ColorSchemes
 
-includet("../src/functions.jl")
+include("../src/functions.jl")
 
 # System parameters
 N = 5
@@ -17,7 +17,7 @@ A, B, C = MSD_matrices(N, m, κ, σ)
 No, Ns = size(C)
 Np = div(Ns, 2)
 l = size(B, 2)
-##
+#
 # Desired output
 x₁ = cumsum(ones(Np)) ./ Np
 y₁ = vcat(x₁, zeros(Np))
@@ -26,7 +26,7 @@ ywant = hcat(y₁, zeros(Ns), zeros(Ns))
 # Initialize storage for results
 xⁱ, vⁱ, uⁱ, yⁱ, αrray, solarray = initialize_sol(Ns, No, l, o, Niter)
 
-##  
+#
 # Compute H matrix
 
 H = compute_H(A, B, C, T)               # Lower block triangular as axpected
@@ -55,7 +55,7 @@ for i in 1:Niter
     end
 end
 
-##
+#   
 # Time vector from the solution (full time points)
 t_vals = 0.0:0.01:T[end]
 x_vals = [solarray[end](t)[1:N] for t in t_vals]  # Position data

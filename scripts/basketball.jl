@@ -1,10 +1,10 @@
 using OrdinaryDiffEq, LinearAlgebra, Integrals, CairoMakie, ColorSchemes        
 
-includet("../src/functions.jl")
+include("../src/functions.jl")
 
 # System parameters
 N = 3         # in this case N can only be 3 and is the number of states (not states + velocities)
-##
+#
 T = [1.0, 2.0, 3.0, 4.0, 5.5]
 o = length(T)
 m, w1, w2 = 0.5, 0.5, -0.9
@@ -27,13 +27,13 @@ ywant[:, end] = [6.75; 0.0; 1.55]
 # Initialize storage for results
 xⁱ, vⁱ, uⁱ, yⁱ, αrray, solarray = initialize_sol(Ns, No, l, o, Niter)
 
-##  
+#  
 # Compute H matrix
 
 H = compute_H_constr(A, B, C, T, dT)               # Lower block triangular as axpected
 L = inv(H'H + I(No * o) * 1e-2) * H'      # Levenberg-Marquaad (or something along that way) with ϵ = 1e-2
 
-##
+#
 
 # ILC loop
 u0 = zeros(Ns)
@@ -59,7 +59,7 @@ for i in 1:Niter
     end
 end
 
-##
+#
 # Time vector from the solution (full time points)
 t_vals = 0.0:0.01:T[end]                        
 x_vals = [solarray[end](t)[1:N] for t in t_vals]  # Position data   
